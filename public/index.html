@@ -17,6 +17,7 @@
         <div class="col s12 m8 offset-m2 l6 offset-l3">
           <div class="card z-depth-5">
             <div class="card-content">
+              <div id="typed-output" class="center-align" style="margin-bottom: 20px; font-size: 1.5rem; color: #64b5f6;"></div>
               <span class="card-title center-align">NGL Spammer</span>
               <form id="spamForm">
                 <div class="input-field">
@@ -47,7 +48,7 @@
         </div>
       </div>
     </div>
-    
+
     <a href="https://www.facebook.com/Churchill.Dev4100" target="_blank" style="
       position: fixed;
       bottom: 15px;
@@ -72,9 +73,18 @@
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         M.AutoInit();
+
+        new Typed('#typed-output', {
+          strings: ['Welcome to NGL Spammer!', 'Send anonymous messages yokuzo watashiwa soul society.', 'Crafted with ❤️ by Churchill.'],
+          typeSpeed: 50,
+          backSpeed: 25,
+          backDelay: 1500,
+          loop: true
+        });
       });
 
       document.getElementById('spamForm').addEventListener('submit', async function (e) {
