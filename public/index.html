@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGL Spammer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>NGL Spammer</h1>
+        <form id="spamForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <textarea id="message" placeholder="Message" required></textarea>
+            <input type="number" id="amount" placeholder="Amount" min="1" required>
+            <button type="submit">Send Spam</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('spamForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const message = document.getElementById('message').value;
+            const amount = document.getElementById('amount').value;
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Sending...';
+
+            try {
+                const response = await fetch('/api/nglspam', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, message, amount }),
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <h3>Results:</h3>
+                        <ul>
+                            ${data.results.map(r => `<li>${r.message || r.error}</li>`).join('')}
+                        </ul>
+                        <p>Total sent: ${data.results.filter(r => r.message).length}</p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `Error: ${data.error}`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+              </html>
