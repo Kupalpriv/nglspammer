@@ -3,22 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <title>NGL Spammer</title>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-      rel="stylesheet"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
   </head>
+
   <body class="blue-grey darken-4">
     <div class="container">
       <div class="row">
         <div class="col s12 m8 offset-m2 l6 offset-l3">
           <div class="card z-depth-5">
             <div class="card-content">
-              <div id="typed-output" class="center-align" style="margin-bottom: 20px; font-size: 1.5rem; color: #64b5f6;"></div>
               <span class="card-title center-align">NGL Spammer</span>
+
+              <div class="center-align" style="margin-bottom: 30px;">
+                <span id="typed-output" style="font-weight: bold; color: #64b5f6; font-size: 1.2rem;"></span>
+              </div>
+
               <form id="spamForm">
                 <div class="input-field">
                   <i class="material-icons prefix">account_circle</i>
@@ -42,58 +45,25 @@
                   </button>
                 </div>
               </form>
+
               <div id="result" class="center-align" style="margin-top: 20px;"></div>
+            </div>
+            <div class="card-action center-align" style="font-size: 0.9rem;">
+              Made with <span style="color: red;">♥</span> by 
+              <a href="https://www.facebook.com/Churchill.Dev4100" target="_blank">Churchill</a>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <a href="https://www.facebook.com/Churchill.Dev4100" target="_blank" style="
-      position: fixed;
-      bottom: 15px;
-      right: 15px;
-      background: linear-gradient(45deg, #1e88e5, #64b5f6);
-      color: white;
-      padding: 10px 15px;
-      border-radius: 25px;
-      font-size: 14px;
-      font-weight: 500;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      text-decoration: none;
-      z-index: 9999;
-      transition: transform 0.3s ease;
-    ">
-      Made with ❤️ by Churchill
-    </a>
-    <style>
-      a[href="https://www.facebook.com/Churchill.Dev4100"]:hover {
-        transform: scale(1.05);
-      }
-    </style>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         M.AutoInit();
+      });
 
-        new Typed('#typed-output', {
-  strings: [
-    'Welcome to NGL Spammer!',
-    'Yokuzo... watashi wa Soul Society da.',          // Aizen - Bleach
-    'Ore ga... Gundam da.',                           // Setsuna - Gundam 00
-    'Ore wa ten ni tatsu!',                           // Raoh - Hokuto no Ken
-    'Kono umi de ichiban jiyuu na otoko da!',         // Luffy - One Piece
-    'Ore wa ningen wo yameru zo, JoJo!',              // Dio - JoJo's Bizarre Adventure
-    'Sentouryoku... tatta no go ka. Gomi me.',        // Vegeta - Dragon Ball Z
-  ],
-  typeSpeed: 50,
-  backSpeed: 25,
-  backDelay: 1800,
-  loop: true
-});
-        
       document.getElementById('spamForm').addEventListener('submit', async function (e) {
         e.preventDefault();
         const form = e.target;
@@ -114,6 +84,22 @@
         } else {
           resultDiv.innerHTML = `<span class="red-text">${result.error}</span>`;
         }
+      });
+
+      new Typed('#typed-output', {
+        strings: [
+          'Welcome to NGL Spammer!',
+          'Yokuzo... watashi wa Soul Society da.',
+          'Ore ga... Gundam da.',
+          'Ore wa ten ni tatsu!',
+          'Kono umi de ichiban jiyuu na otoko da!',
+          'Ore wa ningen wo yameru zo, JoJo!',
+          'Sentouryoku... tatta no go ka. Gomi me.'
+        ],
+        typeSpeed: 50,
+        backSpeed: 25,
+        backDelay: 1800,
+        loop: true
       });
     </script>
   </body>
