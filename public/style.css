@@ -8,68 +8,71 @@ body {
 }
 
 .container {
-  padding-top: 50px;
-  padding-bottom: 50px;
+  padding-top: 60px;
+  padding-bottom: 60px;
 }
 
 .card {
-  margin-top: 50px;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.4);
-  padding: 30px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 30px 25px 10px 25px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
 }
 
 .card-title {
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 2.2rem;
+  font-weight: 700;
   color: #1e88e5;
-  margin-bottom: 20px;
-  text-align: center;
+  margin-bottom: 30px;
+  display: block;
 }
 
 .input-field {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .input-field input[type='text'],
 .input-field input[type='number'] {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
   color: #fff;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: none;
-  border-bottom: 2px solid #1e88e5;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  border-bottom: 1px solid #1e88e5;
+  background-color: transparent;
+  box-shadow: none;
+  font-size: 16px;
 }
 
-.input-field input[type='text']:focus,
-.input-field input[type='number']:focus {
-  border-bottom: 2px solid #64b5f6;
-  background-color: rgba(255, 255, 255, 0.1);
-  outline: none;
+.input-field input:focus {
+  border-bottom: 2px solid #64b5f6 !important;
+  box-shadow: 0 1px 0 0 #64b5f6 !important;
 }
 
 .input-field label {
   color: #ccc;
-  display: block;
-  margin-bottom: 8px;
+}
+
+.input-field input:focus + label {
+  color: #1e88e5 !important;
+}
+
+.input-field .material-icons.prefix {
+  color: #1e88e5;
+}
+
+input::placeholder {
+  color: #bbb;
+}
+
+input:focus::placeholder {
+  color: #888;
 }
 
 .btn {
   background-color: #1e88e5;
-  color: #fff;
-  border: none;
-  border-radius: 25px;
-  padding: 12px 30px;
-  font-size: 16px;
-  cursor: pointer;
+  border-radius: 30px;
+  padding: 0 2rem;
   transition: background-color 0.3s ease;
-  display: block;
-  width: 100%;
+  font-weight: bold;
+  letter-spacing: 1px;
 }
 
 .btn:hover {
@@ -80,34 +83,14 @@ body {
   font-size: 1.2rem;
   margin-top: 20px;
   color: #fff;
-  text-align: center;
 }
 
 @media (max-width: 600px) {
-  .card {
-    margin-top: 20px;
-    padding: 20px;
-  }
-
   .card-title {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
   }
 
   .btn {
     width: 100%;
   }
-}
-
-.input-field i.material-icons.prefix {
-  color: #1e88e5;
-}
-
-input[type='text']::placeholder,
-input[type='number']::placeholder {
-  color: #bbb;
-}
-
-input[type='text']:focus::placeholder,
-input[type='number']:focus::placeholder {
-  color: #888;
 }
