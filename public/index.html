@@ -3,10 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>NGL Spammer</title>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -77,13 +74,26 @@
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         M.AutoInit();
-
+        const typedElement = document.getElementById('typed-output');
         new Typed('#typed-output', {
-          strings: ['Welcome to NGL Spammer!', 'Send anonymous messages yokuzo watashiwa soul society.', 'Crafted with ❤️ by Churchill.'],
+          strings: [
+            'Yokuzo... watashi wa Soul Society da.',
+            'Ore ga... Gundam da.',
+            'Ore wa ten ni tatsu!',
+            'Kono umi de ichiban jiyuu na otoko da!',
+            'Ore wa ningen wo yameru zo, JoJo!',
+            'Sentouryoku... tatta no go ka. Gomi me.'
+          ],
           typeSpeed: 50,
           backSpeed: 25,
-          backDelay: 1500,
-          loop: true
+          backDelay: 1200,
+          loop: false,
+          showCursor: true,
+          onComplete: () => {
+            setTimeout(() => {
+              typedElement.style.display = 'none';
+            }, 1000);
+          }
         });
       });
 
