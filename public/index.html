@@ -79,14 +79,21 @@
         M.AutoInit();
 
         new Typed('#typed-output', {
-          strings: ['Welcome to NGL Spammer!', 'Send anonymous messages yokuzo watashiwa soul society.', 'Crafted with ❤️ by Churchill.'],
-          typeSpeed: 50,
-          backSpeed: 25,
-          backDelay: 1500,
-          loop: true
-        });
-      });
-
+  strings: [
+    'Welcome to NGL Spammer!',
+    'Yokuzo... watashi wa Soul Society da.',          // Aizen - Bleach
+    'Ore ga... Gundam da.',                           // Setsuna - Gundam 00
+    'Ore wa ten ni tatsu!',                           // Raoh - Hokuto no Ken
+    'Kono umi de ichiban jiyuu na otoko da!',         // Luffy - One Piece
+    'Ore wa ningen wo yameru zo, JoJo!',              // Dio - JoJo's Bizarre Adventure
+    'Sentouryoku... tatta no go ka. Gomi me.',        // Vegeta - Dragon Ball Z
+  ],
+  typeSpeed: 50,
+  backSpeed: 25,
+  backDelay: 1800,
+  loop: true
+});
+        
       document.getElementById('spamForm').addEventListener('submit', async function (e) {
         e.preventDefault();
         const form = e.target;
