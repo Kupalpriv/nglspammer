@@ -1,60 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NGL Spammer</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="/assets/css/tailwind.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script defer src="https://unpkg.com/alpinejs@3.13.0/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body>
-    <div class="container">
-        <h1>NGL Spammer</h1>
-        <form id="spamForm">
-            <input type="text" id="username" placeholder="Username" required>
-            <textarea id="message" placeholder="Message" required></textarea>
-            <input type="number" id="amount" placeholder="Amount" min="1" required>
-            <button type="submit">Send Spam</button>
-        </form>
-        <div id="result"></div>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+    <div x-data="nglApp()" class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-12" data-aos="fade-down">
+            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+                NGL Spammer
+            </h1>
+            <p class="text-gray-400">Advanced NGL message sender with real-time analytics</p>
+        </header>
+
+        <!-- Main Form -->
+        <div class="max-w-2xl mx-auto bg-gray-800 rounded-xl p-6 shadow-2xl" data-aos="zoom-in">
+            <form @submit.prevent="submitForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Username</label>
+                    <input x-model="username" type="text" 
+                           class="w-full bg-gray-700 rounded-lg border border-gray-600 px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                           required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Message</label>
+                    <textarea x-model="message" rows="4"
+                              class="w-full bg-gray-700 rounded-lg border border-gray-600 px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                              required></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Amount</label>
+                    <input x-model="amount" type="number" min="1" max="50"
+                           class="w-full bg-gray-700 rounded-lg border border-gray-600 px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                           required>
+                </div>
+
+                <button type="submit" 
+                        class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02]"
+                        :disabled="loading">
+                    <span x-show="!loading">🚀 Start Spamming</span>
+                    <span x-show="loading" class="flex items-center justify-center">
+                        <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                        </svg>
+                        Processing...
+                    </span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Stats Dashboard -->
+        <div x-show="results" class="mt-12 bg-gray-800 rounded-xl p-6" data-aos="fade-up">
+            <h2 class="text-2xl font-bold mb-4">📊 Execution Report</h2>
+            
+            <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="bg-gray-700 p-4 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-green-400" x-text="stats.success"></div>
+                    <div class="text-sm text-gray-400">Success</div>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-red-400" x-text="stats.failed"></div>
+                    <div class="text-sm text-gray-400">Failed</div>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-purple-400" x-text="stats.total"></div>
+                    <div class="text-sm text-gray-400">Total</div>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-700">
+                        <tr>
+                            <th class="px-4 py-3 text-left">#</th>
+                            <th class="px-4 py-3 text-left">Status</th>
+                            <th class="px-4 py-3 text-left">Message</th>
+                            <th class="px-4 py-3 text-left">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="(result, index) in results" :key="index">
+                            <tr class="border-b border-gray-700">
+                                <td class="px-4 py-3" x-text="index + 1"></td>
+                                <td class="px-4 py-3">
+                                    <span x-text="result.status" 
+                                          :class="result.error ? 'text-red-400' : 'text-green-400'">
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3" x-text="result.message || result.error"></td>
+                                <td class="px-4 py-3 text-gray-400" x-text="result.timestamp"></td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <script>
-        document.getElementById('spamForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const message = document.getElementById('message').value;
-            const amount = document.getElementById('amount').value;
+        function nglApp() {
+            return {
+                loading: false,
+                username: '',
+                message: '',
+                amount: 10,
+                results: null,
+                stats: {},
 
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = 'Sending...';
+                async submitForm() {
+                    this.loading = true;
+                    
+                    try {
+                        const response = await fetch('/api/nglspam', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                username: this.username,
+                                message: this.message,
+                                amount: parseInt(this.amount)
+                            })
+                        });
 
-            try {
-                const response = await fetch('/api/nglspam', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, message, amount }),
-                });
+                        const data = await response.json();
+                        
+                        if (!response.ok) throw new Error(data.error || 'Unknown error');
 
-                const data = await response.json();
-                
-                if (data.success) {
-                    resultDiv.innerHTML = `
-                        <h3>Results:</h3>
-                        <ul>
-                            ${data.results.map(r => `<li>${r.message || r.error}</li>`).join('')}
-                        </ul>
-                        <p>Total sent: ${data.results.filter(r => r.message).length}</p>
-                    `;
-                } else {
-                    resultDiv.innerHTML = `Error: ${data.error}`;
+                        this.results = data.results;
+                        this.stats = data.stats;
+                        
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Operation Complete!',
+                            html: `
+                                <div class="text-left">
+                                    <p>Success: <b class="text-green-500">${data.stats.success}</b></p>
+                                    <p>Failed: <b class="text-red-500">${data.stats.failed}</b></p>
+                                    <p>Total: <b class="text-purple-500">${data.stats.total}</b></p>
+                                </div>
+                            `,
+                            confirmButtonColor: '#7c3aed'
+                        });
+                    } catch (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Operation Failed',
+                            text: error.message,
+                            confirmButtonColor: '#7c3aed'
+                        });
+                    } finally {
+                        this.loading = false;
+                        AOS.refresh();
+                    }
                 }
-            } catch (error) {
-                resultDiv.innerHTML = `Error: ${error.message}`;
             }
+        }
+
+        // Initialize animations
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 50
         });
     </script>
 </body>
-              </html>
+</html>
