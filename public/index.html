@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NGL Spammer</title>
+</head>
+<body>
+  <h1>NGL Spammer</h1>
+  <form id="spamForm">
+    <input type="text" name="username" placeholder="NGL Username" required><br>
+    <input type="text" name="message" placeholder="Message" required><br>
+    <input type="number" name="amount" placeholder="Amount" required min="1"><br>
+    <button type="submit">Spam</button>
+  </form>
+  <div id="result"></div>
+  <script>
+    document.getElementById('spamForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        username: form.username.value,
+        message: form.message.value,
+        amount: form.amount.value
+      };
+      const res = await fetch('/api/nglspam', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      document.getElementById('result').textContent = result.message || result.error;
+    });
+  </script>
+</body>
+</html>
