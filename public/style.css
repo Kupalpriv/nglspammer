@@ -1,0 +1,88 @@
+body {
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  font-family: 'Roboto', sans-serif;
+  color: #fff;
+  min-height: 100vh;
+}
+
+.card {
+  margin-top: 50px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1e88e5;
+}
+
+.input-field input[type='text'],
+.input-field input[type='number'] {
+  color: #fff;
+  border-bottom: 1px solid #1e88e5;
+  box-shadow: none;
+}
+
+.input-field input[type='text']:focus,
+.input-field input[type='number']:focus {
+  border-bottom: 2px solid #1e88e5;
+  box-shadow: 0 1px 0 0 #1e88e5;
+}
+
+.input-field label {
+  color: #ccc;
+}
+
+.input-field input:focus + label {
+  color: #1e88e5 !important;
+}
+
+.btn {
+  background-color: #1e88e5;
+  border-radius: 25px;
+  padding: 0 2rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #1565c0;
+}
+
+#result {
+  font-size: 1.2rem;
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+  .card {
+    margin-top: 20px;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+.container {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.input-field i.material-icons.prefix {
+  color: #1e88e5;
+}
+
+input[type='text']::placeholder,
+input[type='number']::placeholder {
+  color: #bbb;
+}
+
+input[type='text']:focus::placeholder,
+input[type='number']:focus::placeholder {
+  color: #888;
+}
