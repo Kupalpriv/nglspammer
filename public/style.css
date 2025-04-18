@@ -16,8 +16,9 @@ body {
   margin-top: 50px;
   border-radius: 10px;
   overflow: hidden;
-  background: #1e1e2f;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
 }
 
 .card-title {
@@ -25,53 +26,50 @@ body {
   font-weight: bold;
   color: #1e88e5;
   margin-bottom: 20px;
+  text-align: center;
+}
+
+.input-field {
+  margin-bottom: 20px;
 }
 
 .input-field input[type='text'],
 .input-field input[type='number'] {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
   color: #fff;
   background-color: rgba(255, 255, 255, 0.05);
   border: none;
   border-bottom: 2px solid #1e88e5;
-  border-radius: 5px;
-  padding: 10px;
-  transition: 0.3s;
+  border-radius: 4px;
+  transition: all 0.3s ease;
 }
 
 .input-field input[type='text']:focus,
 .input-field input[type='number']:focus {
   border-bottom: 2px solid #64b5f6;
-  background-color: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 5px #64b5f6;
+  background-color: rgba(255, 255, 255, 0.1);
   outline: none;
 }
 
 .input-field label {
-  color: #90caf9;
-}
-
-.input-field input:focus + label {
-  color: #64b5f6 !important;
-}
-
-.input-field i.material-icons.prefix {
-  color: #1e88e5;
-}
-
-.input-field input::placeholder {
-  color: #bbb;
-}
-
-.input-field input:focus::placeholder {
-  color: #888;
+  color: #ccc;
+  display: block;
+  margin-bottom: 8px;
 }
 
 .btn {
   background-color: #1e88e5;
+  color: #fff;
+  border: none;
   border-radius: 25px;
-  padding: 0 2rem;
+  padding: 12px 30px;
+  font-size: 16px;
+  cursor: pointer;
   transition: background-color 0.3s ease;
-  font-weight: 600;
+  display: block;
+  width: 100%;
 }
 
 .btn:hover {
@@ -82,12 +80,13 @@ body {
   font-size: 1.2rem;
   margin-top: 20px;
   color: #fff;
-  font-weight: 500;
+  text-align: center;
 }
 
 @media (max-width: 600px) {
   .card {
     margin-top: 20px;
+    padding: 20px;
   }
 
   .card-title {
@@ -99,129 +98,16 @@ body {
   }
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
+.input-field i.material-icons.prefix {
+  color: #1e88e5;
 }
 
-input:focus {
-  background-color: rgba(30, 136, 229, 0.1);
+input[type='text']::placeholder,
+input[type='number']::placeholder {
+  color: #bbb;
 }
 
-input {
-  font-size: 16px;
-}
-
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.card-content {
-  padding: 30px;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  margin: 0;
-  padding: 0;
-}
-
-.input-field {
-  margin-bottom: 20px;
-}
-
-.btn i.material-icons.right {
-  margin-left: 10px;
-}
-
-.input-field input {
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  transform: scale(1.01);
-  transition: transform 0.3s ease;
-}
-
-input:focus-visible {
-  border-color: #90caf9;
-}
-
-.card-content:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 5px;
-  width: 100%;
-  background: linear-gradient(to right, #1e88e5, #64b5f6);
-}
-
-.card-content {
-  position: relative;
-}
-
-.card .input-field input.invalid {
-  border-bottom: 2px solid #ef5350;
-  box-shadow: 0 1px 0 0 #ef5350;
-}
-
-.card .input-field input.valid {
-  border-bottom: 2px solid #66bb6a;
-  box-shadow: 0 1px 0 0 #66bb6a;
-}
-
-.card .input-field .helper-text {
-  color: #ef5350;
-}
-
-.input-field input:disabled {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #aaa;
-}
-
-::selection {
-  background: #64b5f6;
-  color: #000;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #1e88e5;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: #1a1a2e;
-}
-
-.card .btn:focus {
-  background-color: #0d47a1;
-}
-
-.card-content h5 {
-  font-size: 1.4rem;
-  color: #64b5f6;
-  margin-bottom: 10px;
-}
-
-.input-field input::selection {
-  background: #2196f3;
-  color: white;
-}
-
-.card-footer {
-  text-align: center;
-  padding-top: 20px;
-  color: #90caf9;
-  font-size: 14px;
-  opacity: 0.7;
+input[type='text']:focus::placeholder,
+input[type='number']:focus::placeholder {
+  color: #888;
 }
