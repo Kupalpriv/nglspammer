@@ -7,6 +7,11 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .typed-cursor {
+        display: none !important;
+      }
+    </style>
   </head>
   <body class="blue-grey darken-4">
     <div class="container">
@@ -77,6 +82,7 @@
         const typedElement = document.getElementById('typed-output');
         new Typed('#typed-output', {
           strings: [
+            'Welcome!',
             'Yokuzo... watashi wa Soul Society da.',
             'Ore ga... Gundam da.',
             'Ore wa ten ni tatsu!',
@@ -88,7 +94,7 @@
           backSpeed: 25,
           backDelay: 1200,
           loop: false,
-          showCursor: true,
+          showCursor: false,
           onComplete: () => {
             setTimeout(() => {
               typedElement.style.display = 'none';
