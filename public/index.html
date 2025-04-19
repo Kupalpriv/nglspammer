@@ -11,6 +11,13 @@
       .typed-cursor {
         display: none !important;
       }
+      .preloader-wrapper {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+      }
     </style>
   </head>
   <body class="blue-grey darken-4">
@@ -51,6 +58,14 @@
       </div>
     </div>
 
+    <div id="preloader" class="preloader-wrapper big active" style="display: none;">
+      <div class="spinner-layer spinner-blue-only">
+        <div class="circle-clipper left"><div class="circle"></div></div>
+        <div class="gap-patch"><div class="circle"></div></div>
+        <div class="circle-clipper right"><div class="circle"></div></div>
+      </div>
+    </div>
+
     <a href="https://www.facebook.com/Churchill.Dev4100" target="_blank" style="
       position: fixed;
       bottom: 15px;
@@ -65,9 +80,7 @@
       text-decoration: none;
       z-index: 9999;
       transition: transform 0.3s ease;
-    ">
-      Made with ❤️ by Churchill
-    </a>
+    ">Made with ❤️ by Churchill</a>
     <style>
       a[href="https://www.facebook.com/Churchill.Dev4100"]:hover {
         transform: scale(1.05);
@@ -112,24 +125,36 @@
           message: form.message.value,
           amount: form.amount.value,
         };
-        const res = await fetch('/api/nglspam', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-        const result = await res.json();
-        if (result.message) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: result.message,
-            confirmButtonColor: '#64b5f6'
+        document.getElementById('preloader').style.display = 'block';
+        try {
+          const res = await fetch('/api/nglspam', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
           });
-        } else {
+          const result = await res.json();
+          document.getElementById('preloader').style.display = 'none';
+          if (result.message) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: result.message,
+              confirmButtonColor: '#64b5f6'
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: result.error || 'Something went wrong',
+              confirmButtonColor: '#ef5350'
+            });
+          }
+        } catch (err) {
+          document.getElementById('preloader').style.display = 'none';
           Swal.fire({
             icon: 'error',
-            title: 'Error',
-            text: result.error || 'Something went wrong',
+            title: 'Oops!',
+            text: 'Failed to send message.',
             confirmButtonColor: '#ef5350'
           });
         }
