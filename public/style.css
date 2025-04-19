@@ -17,6 +17,7 @@ body {
   background-color: rgba(0, 0, 0, 0.5);
   padding: 30px 25px 10px 25px;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+  position: relative;
 }
 
 .glass-card {
@@ -62,14 +63,6 @@ body {
   color: #1e88e5;
 }
 
-input::placeholder {
-  color: #bbb;
-}
-
-input:focus::placeholder {
-  color: #888;
-}
-
 .btn {
   background-color: #1e88e5;
   border-radius: 30px;
@@ -110,17 +103,25 @@ input:focus::placeholder {
 }
 
 .overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
-  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 10;
   display: none;
   justify-content: center;
   align-items: center;
+  border-radius: 12px;
+}
+
+.loader-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 #lottie-loader {
