@@ -1,10 +1,15 @@
 const axios = require('axios');
 
 module.exports = async (req, res) => {
-  const { username, message, amount } = req.body;
+  let { username, message, amount } = req.body;
 
   if (!username || !message || !amount) {
     return res.status(400).json({ error: 'Missing required fields.' });
+  }
+
+  const match = username.match(/(?:https?:\/\/)?(?:www\.)?ngl\.link\/([a-zA-Z0-9._-]+)/);
+  if (match) {
+    username = match[1];
   }
 
   const spamCount = parseInt(amount);
@@ -27,8 +32,8 @@ module.exports = async (req, res) => {
         await delay(300); 
       } catch (error) {
         if (error.response && error.response.status === 429) {
-          await delay(1000); // wait 1s on rate limit
-          i--; 
+          await delay(1000);
+          i--;
         } else {
           throw error;
         }
