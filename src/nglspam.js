@@ -19,38 +19,49 @@ module.exports = async (req, res) => {
 
   const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
   const timestamp = new Date().toISOString();
-  const logMessage = `[${timestamp}] IP: ${clientIp} | User: ${username} | Msg: "${message}" | Amount: ${spamCount}\n`;
+  const logDir = path.join(__dirname, '../logs');
+  const logFile = path.join(logDir, 'ngl.log');
 
-  console.log(logMessage.trim());
-  fs.appendFile(path.join(__dirname, '../logs/ngl.log'), logMessage, err => {
-    if (err) console.error('Log file error:', err);
-  });
+  if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
+
+  let success = 0;
+  let failed = 0;
+  let rateLimited = 0;
 
   const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-  try {
-    for (let i = 0; i < spamCount; i++) {
-      try {
-        await axios.post('https://ngl.link/api/submit', {
-          username,
-          question: message,
-          deviceId: '23d7346e-7d22-4256-80f3-dd4ce3fd8878',
-          gameSlug: '',
-          referrer: '',
-        });
-        await delay(300);
-      } catch (err) {
-        if (err.response?.status === 429) {
-          await delay(1000);
-          i--;
-        } else {
-          throw err;
-        }
+  for (let i = 0; i < spamCount; i++) {
+    try {
+      await axios.post('https://ngl.link/api/submit', {
+        username,
+        question: message,
+        deviceId: '23d7346e-7d22-4256-80f3-dd4ce3fd8878',
+        gameSlug: '',
+        referrer: '',
+      });
+      success++;
+      await delay(300);
+    } catch (err) {
+      if (err.response?.status === 429) {
+        rateLimited++;
+        await delay(1000);
+        i--; // retry
+      } else {
+        failed++;
       }
     }
-
-    res.json({ success: true, message: `Successfully spammed ${spamCount} times to ${username}` });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
   }
+
+  const finalLog = `[${timestamp}] IP: ${clientIp} | User: ${username} | Msg: "${message}" | Attempted: ${spamCount} | Success: ${success} | RateLimited: ${rateLimited} | Failed: ${failed}\n`;
+
+  fs.appendFile(logFile, finalLog, err => {
+    if (err) console.error('Log file error:', err);
+  });
+
+  console.log(finalLog.trim());
+
+  res.json({
+    success: true,
+    message: `Tried: ${spamCount}, Sent: ${success}, Failed: ${failed}, RateLimited: ${rateLimited}`
+  });
 };
