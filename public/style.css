@@ -14,10 +14,14 @@ body {
 
 .card {
   border-radius: 12px;
-  overflow: hidden;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 30px 25px 10px 25px;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+}
+
+.glass-card {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .card-title {
@@ -85,27 +89,44 @@ input:focus::placeholder {
   color: #fff;
 }
 
-#loader-overlay {
+.credit-link {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  background: linear-gradient(45deg, #1e88e5, #64b5f6);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+  z-index: 9999;
+  transition: transform 0.3s ease;
+}
+
+.credit-link:hover {
+  transform: scale(1.05);
+}
+
+.overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  backdrop-filter: blur(6px);
-  background: rgba(0, 0, 0, 0.4);
-  display: none;
-  align-items: center;
-  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
   z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
 }
 
 #lottie-loader {
-  width: 120px;
-  height: 120px;
-}
-
-a[href="https://www.facebook.com/Churchill.Dev4100"]:hover {
-  transform: scale(1.05);
+  width: 100px;
+  height: 100px;
+  max-width: 90vw;
 }
 
 @media (max-width: 600px) {
