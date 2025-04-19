@@ -18,6 +18,17 @@
         transform: translate(-50%, -50%);
         z-index: 1000;
       }
+      
+      #lottie-loader {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+        width: 150px;
+        height: 150px;
+        display: none;
+      }
     </style>
   </head>
   <body class="blue-grey darken-4">
@@ -58,13 +69,8 @@
       </div>
     </div>
 
-    <div id="preloader" class="preloader-wrapper big active" style="display: none;">
-      <div class="spinner-layer spinner-blue-only">
-        <div class="circle-clipper left"><div class="circle"></div></div>
-        <div class="gap-patch"><div class="circle"></div></div>
-        <div class="circle-clipper right"><div class="circle"></div></div>
-      </div>
-    </div>
+    <!-- Lottie Loader -->
+    <div id="lottie-loader"></div>
 
     <a href="https://www.facebook.com/Churchill.Dev4100" target="_blank" style="
       position: fixed;
@@ -90,7 +96,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.4/lottie.min.js"></script>
     <script>
+      // Lottie Animation for loading
+      const loader = lottie.loadAnimation({
+        container: document.getElementById('lottie-loader'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: false,
+        path: 'https://assets10.lottiefiles.com/packages/lf20_usmfx6bp.json' // Replace with your preferred animation
+      });
+
       document.addEventListener('DOMContentLoaded', function () {
         M.AutoInit();
         const typedElement = document.getElementById('typed-output');
@@ -125,7 +141,8 @@
           message: form.message.value,
           amount: form.amount.value,
         };
-        document.getElementById('preloader').style.display = 'block';
+        document.getElementById('lottie-loader').style.display = 'block';
+        loader.play(); // Start the Lotto pepito
         try {
           const res = await fetch('/api/nglspam', {
             method: 'POST',
@@ -133,7 +150,8 @@
             body: JSON.stringify(data),
           });
           const result = await res.json();
-          document.getElementById('preloader').style.display = 'none';
+          document.getElementById('lottie-loader').style.display = 'none';
+          loader.stop(); 
           if (result.message) {
             Swal.fire({
               icon: 'success',
@@ -150,7 +168,8 @@
             });
           }
         } catch (err) {
-          document.getElementById('preloader').style.display = 'none';
+          document.getElementById('lottie-loader').style.display = 'none';
+          loader.stop();
           Swal.fire({
             icon: 'error',
             title: 'Oops!',
