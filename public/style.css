@@ -85,6 +85,29 @@ input:focus::placeholder {
   color: #fff;
 }
 
+#loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#lottie-loader {
+  width: 120px;
+  height: 120px;
+}
+
+a[href="https://www.facebook.com/Churchill.Dev4100"]:hover {
+  transform: scale(1.05);
+}
+
 @media (max-width: 600px) {
   .card-title {
     font-size: 1.8rem;
