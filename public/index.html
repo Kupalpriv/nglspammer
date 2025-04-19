@@ -24,7 +24,7 @@
                 <div class="input-field">
                   <i class="material-icons prefix">account_circle</i>
                   <input id="username" name="username" type="text" required />
-                  <label for="username">NGL Username</label>
+                  <label for="username">NGL Username or Link</label>
                 </div>
                 <div class="input-field">
                   <i class="material-icons prefix">message</i>
@@ -74,8 +74,8 @@
         e.preventDefault();
         const form = e.target;
         const data = {
-          username: form.username.value,
-          message: form.message.value,
+          username: form.username.value.trim(),
+          message: form.message.value.trim(),
           amount: form.amount.value,
         };
 
