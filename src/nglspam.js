@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
   const match = username.match(/(?:https?:\/\/)?(?:www\.)?ngl\.link\/([a-zA-Z0-9._-]+)/);
   if (match) username = match[1];
 
-  const spamCount = parseInt(amount, 10);
+  const spamCount = parseInt(amount);
   if (isNaN(spamCount) || spamCount <= 0) {
     return res.status(400).json({ error: 'Invalid amount.' });
   }
@@ -24,11 +24,10 @@ module.exports = async (req, res) => {
 
   if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
 
+  const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
   let success = 0;
   let failed = 0;
-  let rateLimited = 0;
-
-  const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
   for (let i = 0; i < spamCount; i++) {
     try {
@@ -40,28 +39,24 @@ module.exports = async (req, res) => {
         referrer: '',
       });
       success++;
-      await delay(300);
     } catch (err) {
+      failed++;
       if (err.response?.status === 429) {
-        rateLimited++;
         await delay(1000);
         i--; // retry
-      } else {
-        failed++;
+        continue;
       }
     }
+    await delay(300);
   }
 
-  const finalLog = `[${timestamp}] IP: ${clientIp} | User: ${username} | Msg: "${message}" | Attempted: ${spamCount} | Success: ${success} | RateLimited: ${rateLimited} | Failed: ${failed}\n`;
+  const logEntry = `[${timestamp}] IP: ${clientIp} | User: ${username} | Sent: ${success}/${spamCount} | Failed: ${failed} | Msg: "${message}"\n`;
 
-  fs.appendFile(logFile, finalLog, err => {
-    if (err) console.error('Log file error:', err);
+  fs.appendFile(logFile, logEntry, err => {
+    if (err) console.error('Error writing to log file:', err);
   });
 
-  console.log(finalLog.trim());
+  console.log(logEntry.trim());
 
-  res.json({
-    success: true,
-    message: `Tried: ${spamCount}, Sent: ${success}, Failed: ${failed}, RateLimited: ${rateLimited}`
-  });
+  res.json({ success: true, message: `Successfully spammed ${spamCount} times to ${username}` });
 };
