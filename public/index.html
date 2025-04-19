@@ -8,25 +8,124 @@
     <link rel="stylesheet" href="style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-      .preloader-wrapper {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 1000;
+      body {
+        background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+        font-family: 'Roboto', sans-serif;
+        color: #fff;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
       }
-      #lottie-loader {
+
+      .container {
+        padding-top: 60px;
+        padding-bottom: 60px;
+      }
+
+      .card {
+        border-radius: 12px;
+        overflow: hidden;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 30px 25px 10px 25px;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+      }
+
+      .card-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #1e88e5;
+        margin-bottom: 30px;
+        display: block;
+      }
+
+      .input-field {
+        margin-bottom: 25px;
+      }
+
+      .input-field input[type='text'],
+      .input-field input[type='number'] {
+        color: #fff;
+        border-bottom: 1px solid #1e88e5;
+        background-color: transparent;
+        box-shadow: none;
+        font-size: 16px;
+      }
+
+      .input-field input:focus {
+        border-bottom: 2px solid #64b5f6 !important;
+        box-shadow: 0 1px 0 0 #64b5f6 !important;
+      }
+
+      .input-field label {
+        color: #ccc;
+      }
+
+      .input-field input:focus + label {
+        color: #1e88e5 !important;
+      }
+
+      .input-field .material-icons.prefix {
+        color: #1e88e5;
+      }
+
+      input::placeholder {
+        color: #bbb;
+      }
+
+      input:focus::placeholder {
+        color: #888;
+      }
+
+      .btn {
+        background-color: #1e88e5;
+        border-radius: 30px;
+        padding: 0 2rem;
+        transition: background-color 0.3s ease;
+        font-weight: bold;
+        letter-spacing: 1px;
+      }
+
+      .btn:hover {
+        background-color: #1565c0;
+      }
+
+      #result {
+        font-size: 1.2rem;
+        margin-top: 20px;
+        color: #fff;
+      }
+
+      #loader-overlay {
         position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 9999;
-        width: 150px;
-        height: 150px;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        backdrop-filter: blur(6px);
+        background: rgba(0, 0, 0, 0.4);
         display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
       }
+
+      #lottie-loader {
+        width: 120px;
+        height: 120px;
+      }
+
       a[href="https://www.facebook.com/Churchill.Dev4100"]:hover {
         transform: scale(1.05);
+      }
+
+      @media (max-width: 600px) {
+        .card-title {
+          font-size: 1.8rem;
+        }
+
+        .btn {
+          width: 100%;
+        }
       }
     </style>
   </head>
@@ -66,22 +165,29 @@
         </div>
       </div>
     </div>
-    <div id="lottie-loader"></div>
+    <div id="loader-overlay">
+      <div id="lottie-loader"></div>
+    </div>
     <a href="https://www.facebook.com/Churchill.Dev4100" target="_blank" style="position: fixed;bottom: 15px;right: 15px;background: linear-gradient(45deg, #1e88e5, #64b5f6);color: white;padding: 10px 15px;border-radius: 25px;font-size: 14px;font-weight: 500;box-shadow: 0 4px 12px rgba(0,0,0,0.3);text-decoration: none;z-index: 9999;transition: transform 0.3s ease;">Made with ❤️ by Churchill</a>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.4/lottie.min.js"></script>
     <script>
+      const loaderOverlay = document.getElementById('loader-overlay');
+      const lottieContainer = document.getElementById('lottie-loader');
+
       const loader = lottie.loadAnimation({
-        container: document.getElementById('lottie-loader'),
+        container: lottieContainer,
         renderer: 'svg',
         loop: true,
         autoplay: false,
         path: 'https://assets10.lottiefiles.com/packages/lf20_usmfx6bp.json'
       });
+
       document.addEventListener('DOMContentLoaded', function () {
         M.AutoInit();
       });
+
       document.getElementById('spamForm').addEventListener('submit', async function (e) {
         e.preventDefault();
         const form = e.target;
@@ -90,7 +196,7 @@
           message: form.message.value,
           amount: form.amount.value,
         };
-        document.getElementById('lottie-loader').style.display = 'block';
+        loaderOverlay.style.display = 'flex';
         loader.play();
         try {
           const res = await fetch('/api/nglspam', {
@@ -99,7 +205,7 @@
             body: JSON.stringify(data),
           });
           const result = await res.json();
-          document.getElementById('lottie-loader').style.display = 'none';
+          loaderOverlay.style.display = 'none';
           loader.stop();
           if (result.message) {
             Swal.fire({
@@ -117,7 +223,7 @@
             });
           }
         } catch (err) {
-          document.getElementById('lottie-loader').style.display = 'none';
+          loaderOverlay.style.display = 'none';
           loader.stop();
           Swal.fire({
             icon: 'error',
