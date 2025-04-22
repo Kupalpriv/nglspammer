@@ -24,36 +24,65 @@ module.exports = async (req, res) => {
 
   if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
 
-  try {
-    const response = await axios.get('https://slixapi.vercel.app/ngl', {
-      params: {
+  const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+  const deviceIds = [
+    '23d7346e-7d22-4256-80f3-dd4ce3fd8878',
+    'd9ae0123-1f67-4e90-a921-3dbcfb6e12c1',
+    '7c532c3f-f40f-42b7-b55d-78f537c1a9cf'
+  ];
+
+  let success = 0;
+  let failed = 0;
+  let sent = 0;
+  const maxConcurrency = 5;
+
+  const sendMessage = async () => {
+    const deviceId = deviceIds[Math.floor(Math.random() * deviceIds.length)];
+    try {
+      await axios.post('https://ngl.link/api/submit', {
         username,
-        message,
-        spam: spamCount,
-        interval: 1000 // optional, adjust if needed
+        question: message,
+        deviceId,
+        gameSlug: '',
+        referrer: '',
+      });
+      success++;
+    } catch (err) {
+      if (err.response?.status === 429) {
+        return 'retry';
+      } else {
+        failed++;
       }
+    }
+    await delay(100 + Math.random() * 200); // random delay between 100–300ms
+    return 'done';
+  };
+
+  while (sent < spamCount) {
+    const batch = [];
+    const remaining = spamCount - sent;
+    const batchSize = remaining >= maxConcurrency ? maxConcurrency : remaining;
+
+    for (let i = 0; i < batchSize; i++) {
+      batch.push(sendMessage());
+    }
+
+    const results = await Promise.all(batch);
+    results.forEach(result => {
+      if (result === 'retry') sent--; // retry later
     });
 
-    const result = response.data?.result || [];
-    const success = result.filter(item => item.code === 200).length;
-    const failed = spamCount - success;
-
-    const logEntry = `[${timestamp}] IP: ${clientIp} | User: ${username} | Sent: ${success}/${spamCount} | Failed: ${failed} | Msg: "${message}"\n`;
-
-    fs.appendFile(logFile, logEntry, err => {
-      if (err) console.error('Error writing to log file:', err);
-    });
-
-    console.log(logEntry.trim());
-
-    res.json({
-      success: true,
-      message: `Successfully sent ${success}/${spamCount} messages to ${username}`,
-      details: result
-    });
-
-  } catch (err) {
-    console.error('API request failed:', err.message);
-    res.status(500).json({ error: 'Something went wrong with the API request.' });
+    sent += batchSize;
+    await delay(500); // batch delay
   }
+
+  const logEntry = `[${timestamp}] IP: ${clientIp} | User: ${username} | Sent: ${success}/${spamCount} | Failed: ${failed} | Msg: "${message}"\n`;
+
+  fs.appendFile(logFile, logEntry, err => {
+    if (err) console.error('Error writing to log file:', err);
+  });
+
+  console.log(logEntry.trim());
+
+  res.json({ success: true, message: `Successfully spammed ${success}/${spamCount} to ${username}`, failed });
 };
