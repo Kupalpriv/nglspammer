@@ -28,7 +28,12 @@ module.exports = async (req, res) => {
   const deviceIds = [
     '23d7346e-7d22-4256-80f3-dd4ce3fd8878',
     'd9ae0123-1f67-4e90-a921-3dbcfb6e12c1',
-    '7c532c3f-f40f-42b7-b55d-78f537c1a9cf'
+    '7c532c3f-f40f-42b7-b55d-78f537c1a9cf',
+    '9f23bc4a-09f8-4d9f-801f-6dd624aef301',
+    '2a47d3d6-09a9-44dc-b2d7-497bd876fc3b',
+    'abcde123-4567-89ab-cdef-0123456789ab',
+    '8e7b90f3-21c4-4ee5-83f2-1fa38291f3e7',
+    'd3a9b0cd-143c-41d0-b3ff-5b946234f617'
   ];
 
   let success = 0;
@@ -54,7 +59,7 @@ module.exports = async (req, res) => {
         failed++;
       }
     }
-    await delay(100 + Math.random() * 200); // random delay between 100–300ms
+    await delay(100 + Math.random() * 200);
     return 'done';
   };
 
@@ -69,11 +74,11 @@ module.exports = async (req, res) => {
 
     const results = await Promise.all(batch);
     results.forEach(result => {
-      if (result === 'retry') sent--; // retry later
+      if (result === 'retry') sent--;
     });
 
     sent += batchSize;
-    await delay(500); // batch delay
+    await delay(500);
   }
 
   const logEntry = `[${timestamp}] IP: ${clientIp} | User: ${username} | Sent: ${success}/${spamCount} | Failed: ${failed} | Msg: "${message}"\n`;
