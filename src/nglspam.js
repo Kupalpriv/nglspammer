@@ -24,39 +24,36 @@ module.exports = async (req, res) => {
 
   if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
 
-  const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-  let success = 0;
-  let failed = 0;
-
-  for (let i = 0; i < spamCount; i++) {
-    try {
-      await axios.post('https://ngl.link/api/submit', {
+  try {
+    const response = await axios.get('https://slixapi.vercel.app/ngl', {
+      params: {
         username,
-        question: message,
-        deviceId: '23d7346e-7d22-4256-80f3-dd4ce3fd8878',
-        gameSlug: '',
-        referrer: '',
-      });
-      success++;
-    } catch (err) {
-      failed++;
-      if (err.response?.status === 429) {
-        await delay(1000);
-        i--; // retry
-        continue;
+        message,
+        spam: spamCount,
+        interval: 1000 // optional, adjust if needed
       }
-    }
-    await delay(300);
+    });
+
+    const result = response.data?.result || [];
+    const success = result.filter(item => item.code === 200).length;
+    const failed = spamCount - success;
+
+    const logEntry = `[${timestamp}] IP: ${clientIp} | User: ${username} | Sent: ${success}/${spamCount} | Failed: ${failed} | Msg: "${message}"\n`;
+
+    fs.appendFile(logFile, logEntry, err => {
+      if (err) console.error('Error writing to log file:', err);
+    });
+
+    console.log(logEntry.trim());
+
+    res.json({
+      success: true,
+      message: `Successfully sent ${success}/${spamCount} messages to ${username}`,
+      details: result
+    });
+
+  } catch (err) {
+    console.error('API request failed:', err.message);
+    res.status(500).json({ error: 'Something went wrong with the API request.' });
   }
-
-  const logEntry = `[${timestamp}] IP: ${clientIp} | User: ${username} | Sent: ${success}/${spamCount} | Failed: ${failed} | Msg: "${message}"\n`;
-
-  fs.appendFile(logFile, logEntry, err => {
-    if (err) console.error('Error writing to log file:', err);
-  });
-
-  console.log(logEntry.trim());
-
-  res.json({ success: true, message: `Successfully spammed ${spamCount} times to ${username}` });
 };
